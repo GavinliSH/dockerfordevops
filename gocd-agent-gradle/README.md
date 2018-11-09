@@ -22,7 +22,7 @@ docker run -d -p8153:8153 -p8154:8154 --name go-server-1 gocd/gocd-server:v18.10
 #### go-agent:gradle
 ##### build
 ```
-docker build -t go-agent:gradle ./gocd-agent
+docker build -t go-agent:gradle ./gocd-agent-gradle
 ```
 ##### run
 ```
