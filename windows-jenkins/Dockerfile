@@ -1,16 +1,20 @@
 # FROM openjdk:8u191-jdk-windowsservercore-ltsc2016
-FROM openjdk:8u191-jdk-nanoserver-sac2016
+FROM openjdk:8u191-jdk-windowsservercore-ltsc2016
 
 ENV HOME /jenkins
 ENV JENKINS_VERSION 2.0
 RUN mkdir \jenkins
-# RUN powershell -Command "wget -Uri https://updates.jenkins-ci.org/download/war/2.0/jenkins.war -UseBasicParsing -OutFile /jenkins/jenkins.war"
 COPY package/jenkins.war /jenkins/
-COPY package/Git-2.19.1-64-bit.exe /jenkins/
-
+# 配置git
+COPY package/MinGit-2.12.2.2-64-bit.zip MinGit.zip
+RUN Expand-Archive c:\MinGit.zip -DestinationPath c:\MinGit 
+RUN $env:PATH = $env:PATH + ';C:\MinGit\cmd\;C:\MinGit\cmd'; \
+    "& Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\' -Name Path -Value $env:PATH"
+RUN $env:PATH
+# 开放端口
 EXPOSE 8080
 EXPOSE 50000
 
 # Run jenkins
-CMD java -jar C:\\jenkins\\jenkins.war
 
+CMD java -jar C:\\jenkins\\jenkins.war
